@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html >
+  <head>
+    <meta charset="UTF-8">
+
+
+    <title>CodePen - Weather check</title>
+    
+    
+    
+    <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css'>
+<link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/weather-icons/2.0.9/css/weather-icons.min.css'>
+<link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/weather-icons/2.0.9/font/weathericons-regular-webfont.svg'>
+<link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css'>
+<link rel='stylesheet prefetch' href='https://fonts.googleapis.com/css?family=Crimson+Text'>
+
+        <style>
+      /*#weatherBox{
+  position: absolute;
+  margin-top: 40px;
+  margin-left: 50%;
+}*/
+.well {
+  position: ;
+  margin-top: 20%;
+  margin-left: 50%;
+  background: white;
+  border-left: 10px solid orange;
+}
+
+.wi {
+  font-size: 5em;
+  color: blue;
+  margin: 2%;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  
+}
+
+#cf{
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.btn {
+  background-color: orange;
+  color: white;
+}
+
+.btn:hover {
+  color: white;
+}
+
+
+
+
+    </style>
+
+    <script>
+  window.console = window.console || function(t) {};
+</script>
+
+    
+    
+  </head>
+
+  <body translate="no" >
+
+      <div class="row text-center">
+    <div class="well col-md-4">
+      <p><i id="icon"></i></p>
+      <p id='out'></p>
+      <div id='temp'>Loading...</div>
+      <button id='cf' class='btn'>C</button>
+    </div>
+      <script src="//assets.codepen.io/assets/common/stopExecutionOnTimeout-f961f59a28ef4fd551736b43f94620b5.js"></script>
+
+    <script src='//cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js'></script>
+
+        <script>
+      function geoFindMe() {
+    var output = document.getElementById('out');
+    if (!navigator.geolocation) {
+        output.innerHTML = '<p>Geolocation is not supported by your browser</p>';
+        return;
+    }
+    var units = 'metric';
+    var latitude;
+    var longitude;
+    var unitSign = '&#8451';
+    function success(position) {
+        latitude = position.coords.latitude;
+        longitude = position.coords.longitude;
+        output.innerHTML = '<p>Latitude is ' + latitude + '\xB0 <br>Longitude is ' + longitude + '\xB0</p>';
+    }
+    ;
+    function error() {
+        output.innerHTML = 'Unable to retrieve your location';
+    }
+    ;
+    navigator.geolocation.getCurrentPosition(success, error);
+    function getWeather() {
+        $.getJSON('http://api.openweathermap.org/data/2.5/weather?lat=' + latitude + '&lon=' + longitude + '&APPID=12e163e7695070de068a43720ee2e5a8&units=' + units, function (data) {
+            $('#temp').html('<ul>' + '<li>' + 'Temperature: ' + data.main.temp + unitSign + '</li>' + '<li>' + 'Weather: ' + data.weather[0].description + '</li>' + '</ul>');
+            switch (data.weather[0].description) {
+            case 'clear sky':
+                $('#icon').attr('class', 'wi wi-day-sunny-overcast');
+                break;
+            case 'few clouds':
+                $('#icon').attr('class', 'wi wi-day-sunny-overcast');
+                break;
+            case 'scattered clouds':
+                $('#icon').attr('class', 'wi wi-cloudy-gusts');
+                break;
+            case 'broken clouds':
+                $('#icon').attr('class', 'wi wi-day-cloudy');
+                break;
+            case 'shower rain':
+                $('#icon').attr('class', 'wi wi-showers');
+                break;
+            case 'heavy intensity shower rain':
+                $('#icon').attr('class', 'wi wi-showers');
+                break;
+            case 'rain':
+                $('#icon').attr('class', 'wi wi-rain');
+                break;
+            case 'thunderstorm':
+                $('#icon').attr('class', 'wi wi-thunderstorm');
+                break;
+            case 'snow':
+                $('#icon').attr('class', 'wi wi-snow');
+                break;
+            case 'mist':
+                $('#icon').attr('wi', 'wi wi-smog');
+                break;
+            default:
+                $('#icon').attr('class', 'wi wi-day-sunny');
+            }
+            ;
+        });
+    }
+    ;
+    getWeather();
+    function unitChange(id) {
+        $(id).click(function () {
+            var text = $(id).text();
+            $(this).text(text == 'C' ? 'F' : 'C');
+            units = units == 'metric' ? 'imperial' : 'metric';
+            unitSign = unitSign == '&#8451' ? '&#8457' : '&#8451';
+            getWeather();
+        });
+    }
+    ;
+    geoFindMe.unitChange = unitChange;
+}
+;
+$(document).ready(function () {
+    geoFindMe();
+    $('#cf').click(geoFindMe.unitChange('#cf'));
+});
+      //# sourceURL=pen.js
+    </script>
+
+    
+    <script>
+  if (document.location.search.match(/type=embed/gi)) {
+    window.parent.postMessage("resize", "*");
+  }
+</script>
+
+    
+  </body>
+</html>
